@@ -21,13 +21,13 @@ var burger = require("../models/models.js");
             
     });
 
-    // router.post("/burgers/new", function(req, res) {
-    //     burger.create(req.body.burger_name, function(result) {
+    router.post("/burgers/new", function(req, res) {
+        burger.makeNew(req.body.burger_name, function(result) {
           
-    //       console.log(result);
-    //       res.redirect("/");
-    //     });
-    //   });
+          console.log(result);
+          res.redirect("/");
+        });
+      });
 
       
 

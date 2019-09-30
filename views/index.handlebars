@@ -30,6 +30,9 @@
       <ul id="burger-list" class="list-group">
         {{#each burgers}}
         <li data-id="{{this.burger_name}}" class="list-group-item">
+          <pre>
+              {{this.id}}. {{this.burger_name}}"
+            </pre>
           <button class="btn btn-danger float-right delete">just EAT IT!!!</button>
         </li>
         {{/each}}
@@ -66,18 +69,6 @@ var API = {
       data: JSON.stringify(burgers)
     });
   },
-  getTeams: function () {
-    return $.ajax({
-      url: "api/burgers/",
-      type: "GET"
-    });
-  },
-  deleteTeam: function (id) {
-    return $.ajax({
-      url: "api/burgers/" + id,
-      type: "DELETE"
-    });
-  }
 };
 
 // refreshTeamList gets new teams from the db and repopulates the list
@@ -112,35 +103,37 @@ var refreshTeamList = function () {
 // handleFormSubmit is called whenever we submit a new team
 // Save the new team to the db and refresh the list
 var handleFormSubmit = function (event) {
-  event.preventDefault();
 
-  var burgers = {
-    burger_name: $burger_name.val().trim(),
+    console.log('in handle form submit');
+
+    event.preventDefault();
+
+    var burger_name = $burger_name.val().trim()
+    //var burgers = {
+    // burger_name: $burger_name.val().trim(),
     //devoured: $devoured.boolean();
-  };
+    //};
 
-  if (!burger) {
-    alert("You must enter a burger name!");
-    return;
-  }
+    if (!burger_name) {
+        alert("You must enter a burger name!");
+        return;
+    }
 
-  API.saveTeam(burgers).then(function () {
-    refreshTeamList();
-  });
+    // (burgers).then(function () {
+    //  refreshTeamList();
+    //});
 
-  $burger_name.val("");
+    $.ajax({
+        url: "/burgers/new" + id,
+        data: burger_name
+        type: "POST"
+    });
+
+    $burger_name.val("");
 };
 
 // handleDeleteBtnClick is called when an team's delete button is clicked
 // Remove the team from the db and refresh the list
-
-var handleDeleteBtnClick = function () {
-  var idToDelete = $(this).parent().attr("data-id");
-  API.deleteTeam(idToDelete).then(function () {
-    refreshTeamList();
-  });
-};
-
 
 
 
@@ -148,6 +141,5 @@ var handleDeleteBtnClick = function () {
 
 // Add event listeners to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmit);
-$burgerList.on("click", ".delete", handleDeleteBtnClick);
 
 </script>

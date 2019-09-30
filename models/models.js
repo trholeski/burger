@@ -6,12 +6,8 @@ var burger = {
         callback(res);
       });
     },
-    create: function(name, cb) {
-        orm.create("burgers", [
-          "burger_name", "devoured"
-        ], [
-          name, false
-        ], cb);
+    makeNew: function(name, callback) {
+        orm.makeNew("burgers", ["burger_name", "devoured"], [name, false], callback);
     },
 };    
 
