@@ -18,25 +18,38 @@
 <div class="container">
   <div class="row">
     <div class="col-8 offset-2">
-      <form class="clearfix mb-4" action="POST">
+      <form class="clearfix mb-4" action="/burgers/new" method="POST">
         <div class="form-group">
-          <label for="teamData-name"> {{msg}} </label>
-          <input type="text" id="burger-name" class="form-control" aria-describedby="burger-name"
+          <label form="newBurger"> {{msg}} </label>
+          <input type="text" id="burger_name" class="form-control" name="burger_name" value="", 
             placeholder="describe new burger">
         </div>
         <button id="submit" class="btn btn-primary float-right">Submit</button>
       </form>
-      <h3 class='text-center'>LIST OF BURGERS</h3>
-      <ul id="burger-list" class="list-group">
-        {{#each burgers}}
-        <li data-id="{{this.burger_name}}" class="list-group-item">
-          <pre>
-              {{this.id}}. {{this.burger_name}}"
-            </pre>
-          <button class="btn btn-danger float-right delete">just EAT IT!!!</button>
-        </li>
-        {{/each}}
-      </ul>
+      
+          <h3 class='text-center'>LIST OF BURGERS</h3>
+            <ul id="burger-list" class="list-group">
+                {{#each burgers}}
+                <form action="/burgers/devour/{{this.id}}" method="POST">
+                    <li data-id="{{this.burger_name}}" class="list-group-item">
+                        <pre>{{this.id}}. {{this.burger_name}}</pre>
+                        {{!-- <pre>Is it devoured? {{this.devoured}}</pre> --}}
+                        <pre> Is it devoured?
+                            {{#if this.devoured}}
+                                yes
+                                {{else}}
+                                no
+                            {{/if}}
+                        </pre>
+                        
+                        {{!-- <button class="btn btn-danger float-right delete">just EAT IT!!!</button> --}}
+                        <input type="submit" value="just EAT IT!!!!">
+                    </li>
+                </form>
+                {{/each}}
+            </ul>
+      </form>
+      
 
 
     </div>
@@ -46,100 +59,3 @@
 
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-
-
-// Get references to page elements
-var $burgerName = $("#burger-name");
-//{{!-- devoured - boolean --}}
-var $submitBtn = $("#submit");
-var $burgerList = $("#burger-list");
-
-
-
-// The API object contains methods for each kind of request we'll make
-var API = {
-  saveTeam: function (burgers) {
-    return $.ajax({
-      headers: {
-        "Content-Type": "application/json"
-      },
-      type: "POST",
-      url: "api/burgers/",
-      data: JSON.stringify(burgers)
-    });
-  },
-};
-
-// refreshTeamList gets new teams from the db and repopulates the list
-var refreshTeamList = function () {
-  API.getTeams().then(function (data) {
-    var $burgers = data.map(function (burgers) {
-      var $a = $("<a>")
-        .text(burgers.burgers_name);
-
-      var $li = $("<li>")
-        .attr({
-          class: "list-group-item",
-          "data-id": burgers.id
-        })
-        .append($a);
-
-      var $button = $("<button>")
-        .addClass("btn btn-danger float-right delete")
-        .text("just EAT IT!!!!!");
-
-      $li.append($button);
-
-      return $li;
-    });
-
-    $burgerList.empty();
-    $burgerList.append($burgers);
-  });
-};
-
-
-// handleFormSubmit is called whenever we submit a new team
-// Save the new team to the db and refresh the list
-var handleFormSubmit = function (event) {
-
-    console.log('in handle form submit');
-
-    event.preventDefault();
-
-    var burger_name = $burger_name.val().trim()
-    //var burgers = {
-    // burger_name: $burger_name.val().trim(),
-    //devoured: $devoured.boolean();
-    //};
-
-    if (!burger_name) {
-        alert("You must enter a burger name!");
-        return;
-    }
-
-    // (burgers).then(function () {
-    //  refreshTeamList();
-    //});
-
-    $.ajax({
-        url: "/burgers/new" + id,
-        data: burger_name
-        type: "POST"
-    });
-
-    $burger_name.val("");
-};
-
-// handleDeleteBtnClick is called when an team's delete button is clicked
-// Remove the team from the db and refresh the list
-
-
-
-
-
-// Add event listeners to the submit and delete buttons
-$submitBtn.on("click", handleFormSubmit);
-
-</script>

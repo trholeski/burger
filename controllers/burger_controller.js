@@ -8,26 +8,36 @@ var burger = require("../models/models.js");
 
     // Load burger List page
     router.get("/", function (req, res) {
-        console.log('in router.get "/"');
-        burger.selectAll(function(burger_data) {
-
-                        // Render the page to handlebars (homepage with burgers from db)
+        burger.selectAll(function(burger_data) {         // Render the page to handlebars (homepage with burgers from db)
             res.render("index", {
                 msg: "Welcome!",
                 burgers: burger_data
             });
         })
-
-            
     });
 
     router.post("/burgers/new", function(req, res) {
         burger.makeNew(req.body.burger_name, function(result) {
-          
-          console.log(result);
           res.redirect("/");
         });
-      });
+    });
+
+    router.post("/burgers/devour/:id", function(req, res) {
+        burger.updateDevoured(req.params.id, function(result) {
+          
+          console.log('in put', result);
+          res.redirect("/");
+        });
+    });
+
+    // app.get("/teamData/:id", function (req, res) {
+    //     db.TeamData.findOne({ where: { id: req.params.id } }).then(function (dbTeamData) {
+    //         // Render the page to handlebars (teamLobby.handlebars)
+    //         res.render("teamLobby", {
+    //             teamData: dbTeamData,
+    //         });
+    //     });
+    // });
 
       
 

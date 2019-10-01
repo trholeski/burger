@@ -7,8 +7,11 @@ var burger = {
       });
     },
     makeNew: function(name, callback) {
-        orm.makeNew("burgers", ["burger_name", "devoured"], [name, false], callback);
+        orm.makeNew(name, false, callback);
     },
+    updateDevoured: function(id, callback) {
+        orm.updateDevoured(id, callback);
+    }
 };    
 
     module.exports = burger;
