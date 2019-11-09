@@ -4,6 +4,7 @@ var mysql = require("mysql");
 //if we are on Heroku and the JawsDB addon is configured, we will have the environment variable JAWSDB_URL
 //this variable will contain what mysql package needs to connect :)
 require('dotenv').config();
+
 var mysql = require('mysql');
 var connection;
 if(process.env.JAWSDB_URL) {  
